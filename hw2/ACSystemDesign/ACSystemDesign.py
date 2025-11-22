@@ -34,7 +34,7 @@ class ACConfig:
     hysteresis: float = 0.3
 
 # the main state machine class
-class ACStateMAchine:
+class ACStateMachine:
     # init
     def __init__(self, initial_temp: float, target_temp: float = None, cfg: ACConfig = None):
         self.cfg = cfg or ACConfig()
@@ -231,3 +231,54 @@ class ACStateMAchine:
                 f"cooler_state={self.cooler_state}, heater_state={self.heater_state}, "
                 f"current_temp={self.current_temp:.2f}, target_temp={self.target_temp:.2f}")
 
+#testing
+if __name__== "__main__":
+    init = float(input("Enter initial temperature: "))
+    target = float(input("Enter initial target temperature: "))
+
+    ac = ACStateMachine(initial_temp=init, target_temp=target)
+    print(ac.status())
+
+    while True:
+        print("Choose an action:")
+        print("1 - Update temperature")
+        print("2 - Change target temperature")
+        print("3 - Manual set state")
+        print("4 - Show status")
+        print("5 - Exit")
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            temp = float(input("Enter new current temperature: "))
+            ac.temperature_update(temp)
+            print(ac.status())
+
+        elif choice == "2":
+            t = float(input("Enter new target temperature: "))
+            ac.set_target_temperature(t)
+            print(ac.status())
+
+        elif choice == "3":
+            print("Select superstate: 1=COOLER, 2=HEATER")
+            s_choice = input()
+            if s_choice == "1":
+                print("Select cooler substate: 1=LOW, 2=MEDIUM, 3=HIGH")
+                c = input()
+                mapping = {"1": CoolerState.COOL_LOW, "2": CoolerState.COOL_MEDIUM, "3": CoolerState.COOL_HIGH}
+                ac.manual_set(SuperState.COOLER, mapping[c])
+            else:
+                print("Select heater substate: 1=STANDBY, 2=PREHEAT, 3=RAMP, 4=MAINTAIN")
+                h = input()
+                mapping = {"1": HeaterState.HEAT_STANDBY, "2": HeaterState.HEAT_PREHEAT, "3": HeaterState.HEAT_RAMP, "4": HeaterState.HEAT_MAINTAIN}
+                ac.manual_set(SuperState.HEATER, mapping[h])
+            print(ac.status())
+
+        elif choice == "4":
+            print(ac.status())
+
+        elif choice == "5":
+            print("Exiting")
+            break
+
+        else:
+            print("Invalid choice. Try again.")
