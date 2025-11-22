@@ -1,0 +1,2 @@
+design and implement an air conditioning system with 2 super states.
+the cooling superstate should have 3, and the heating superstate should have 4 substates.
