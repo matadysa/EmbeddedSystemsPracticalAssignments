@@ -1,0 +1,15 @@
+Report on implementation:
+I used chatgpt to come up with a design for the system.
+It gave me the idea to make the cooler system a 3-state (high/meduim/low) superstate (as it was in the slides) and the heater a 4-state (standby/maintain/preheat/ramp) superstate.
+The idea of the heater states was from chatgpt to make it practically a 3-state superstate like the cooler plus a standby substate that acts as the off state but makes the heater a 4-state superstate as wanted in the assignment.
+Then the implementation was done using enums to make the state names clear and understandable to human eye instead of a bunch of numbers.
+The temperature change boundaries were implemented useing a dataclass.
+The main state machine class is implemented so that the action of entry/exit of the states and superstates can be changed directly and with minimal effort.
+The class state changes and actions are also encapsulated so that they cant be accessed directly and anyone who wants to change or view the values should use the interface and status functions.
+Then the evaluate function is implemented so that after every change in values it can reevaluate the new state our machine is in. It is the logical part of the program.
+At last there is the testing interface of the program which allows the user to test different scenarios on the machine andd also force change the state of the machine.
+
+Sources (as mentioned in source.txt file):
+[1] python docs
+[2] chatgpt
+
